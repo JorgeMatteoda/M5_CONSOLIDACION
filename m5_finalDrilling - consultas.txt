@@ -1,0 +1,138 @@
+-- Construye las siguientes consultas: 
+--• Aquellas usadas para insertar, modificar y eliminar un Customer, Staff y Actor. 
+
+	--INSERT NEW RECORD IN CUSTOMER
+	insert into customer (store_id, first_name, last_name, email, address_id, activebool, create_date, last_update, active)
+	values (2, 'Hunen', 'Epulelu', 'hunen.epu@sakilacustomer.org', 1, true, NOW(), NOW(), 1);
+
+	--UPDATE A RECORD IN CUSTOMER
+	update Customer
+	set email = 'epu.hunen@sakilacustomer.org'
+	where customer_id = 600;
+
+	--DELETE A RECORD IN CUSTOMER
+	delete from customer
+	where customer_id = 600;
+
+	--INSERT NEW RECORD IN STAFF
+	insert into staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update)
+	values ('Cüla', 'Melilelu', 1, 'cüla.melilelu@sakilastaff.com', 1, true, 'cülamelilelu', 'password', NOW());
+
+	--UPDATE A RECORD IN STAFF
+	update staff
+	set first_name = 'Melilelu', last_name = 'Cüla'
+	where staff_id = 3;
+
+	--DELETE A RECORD IN STAFF
+	delete from staff
+	where staff_id = 3;
+
+	--INSERT NEW RECORD IN ACTOR
+	insert into actor (first_name, last_name, last_update)
+	values ('Tom', 'Hanks', NOW());
+
+	--UPDATE A NEW RECORD IN ACTOR
+	update actor
+	set first_name = 'Tomás'
+	where actor_id = 201;
+
+	-- DELETE A RECORD IN ACTOR
+	delete from actor
+	where actor_id = 201;
+
+--• Listar todas las “rental” con los datos del “customer” dado un año y mes. 
+	select *
+	from rental
+	join customer on rental.customer_id = customer.customer_id
+	where customer.first_name = 'Austin' 
+		and customer.last_name = 'Cintron'
+		and extract (year from rental.rental_date) = 2005
+		and extract (month from rental.rental_date) = 8;
+
+--• Listar Número, Fecha (payment_date) y Total (amount) de todas las “payment”. 
+	select payment_id as Número, payment_date as Fecha, amount as Total
+	from payment;
+	
+--• Listar todas las “film” del año 2006 que contengan un (rental_rate) mayor a 4.0. 
+	select *
+	from film
+	where release_year = 2006
+	  and rental_rate > 4.0;
+
+
+--Diccionario de datos: 
+
+
+1. Tabla: customer
+   - customer_id: integer (No nulo)
+   - store_id: smallint (No nulo)
+   - first_name: character varying(45) (No nulo)
+   - last_name: character varying(45) (No nulo)
+   - email: character varying(50)
+   - address_id: smallint (No nulo)
+   - activebool: boolean (No nulo)
+   - create_date: date (No nulo)
+   - last_update: timestamp without time zone
+   - active: integer
+
+2. Tabla: address
+   - address_id: integer (No nulo)
+   - address: character varying(50) (No nulo)
+   - address2: character varying(50)
+   - district: character varying(20) (No nulo)
+   - city_id: smallint (No nulo)
+   - postal_code: character varying(10)
+   - phone: character varying(20) (No nulo)
+   - last_update: timestamp without time zone (No nulo)
+
+3. Tabla: city
+   - city_id: integer (No nulo)
+   - city: character varying(50) (No nulo)
+   - country_id: smallint (No nulo)
+   - last_update: timestamp without time zone (No nulo)
+
+4. Tabla: country
+   - country_id: integer (No nulo)
+   - country: character varying(50) (No nulo)
+   - last_update: timestamp without time zone (No nulo)
+
+5. Tabla: staff
+   - staff_id: integer (No nulo)
+   - first_name: character varying(45) (No nulo)
+   - last_name: character varying(45) (No nulo)
+   - address_id: smallint (No nulo)
+   - email: character varying(50)
+   - store_id: smallint (No nulo)
+   - active: boolean (No nulo)
+   - username: character varying(16) (No nulo)
+   - password: character varying(40)
+   - last_update: timestamp without time zone (No nulo)
+   - picture: bytea
+
+6. Tabla: payment
+   - payment_id: integer (No nulo)
+   - customer_id: smallint (No nulo)
+   - staff_id: smallint (No nulo)
+   - rental_id: integer (No nulo)
+   - amount: numeric(5, 2) (No nulo)
+   - payment_date: timestamp without time zone (No nulo)
+
+7. Tabla: rental
+   - rental_id: integer (No nulo)
+   - rental_date: timestamp without time zone (No nulo)
+   - inventory_id: integer (No nulo)
+   - customer_id: smallint (No nulo)
+   - return_date: timestamp without time zone
+   - staff_id: smallint (No nulo)
+   - last_update: timestamp without time zone (No nulo)
+
+8. Tabla: inventory
+   - inventory_id: integer (No nulo)
+   - film_id: smallint (No nulo)
+   - store_id: smallint (No nulo)
+   - last_update: timestamp without time zone (No nulo)
+
+9. Tabla: film
+   - film_id: integer (No nulo)
+   - title: character varying(255) (No nulo)
+   - description: text
